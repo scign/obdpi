@@ -8,7 +8,7 @@ import atexit
 import sys
 from time import sleep
 
-import obdpi.shared_settings
+import obdpi.shared_settings as SETTINGS
 from obdpi.log_manager import LogManager
 from obdpi.serial_manager import SerialManager
 from obdpi.obd_manager import ObdManager
@@ -53,13 +53,14 @@ def get_obd_response(obd_command):
 
 def start(obd_command):
     while True:
-        if init_serial(obdpi.shared_settings.is_testing, obdpi.shared_settings.environment) == "SUCCESS":
+        if init_serial(SETTINGS.is_testing, SETTINGS.environment) == "SUCCESS":
             if init_obd(ser_man.connection_id) == "SUCCESS":
                 break
-        sleep(1.0)
+        sleep(SETTINGS.serial_repeat_delay)
+    
     while True:
         obd_response = get_obd_response(obd_command)
-        sleep(0.15)
+        sleep(SETTINGS.obd_poll_interval)
 
 
 @log_man.log_event_decorator("Ending Script", "INFO")
@@ -70,8 +71,8 @@ def end():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         obd_command = str(sys.argv[1])
-    elif obdpi.shared_settings.obd_command is not None:
-        obd_command = str(obdpi.shared_settings.obd_command)
+    elif SETTINGS.obd_command is not None:
+        obd_command = str(SETTINGS.obd_command)
     else:
         obd_command = "RPM"
 
