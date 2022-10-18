@@ -1,0 +1,6 @@
+pandas
+matplotlib
+starlite
+obd
+requests
+seaborn
