@@ -3,7 +3,10 @@ A Python 2.7 project designed for the Raspberry Pi to output a vehicle's OBD-II 
 
 ## Reference
 Adapted from [https://github.com/bendrick92/obdPi](https://github.com/bendrick92/obdPi)
+
 See [https://bendrick92.github.io/obdPi](https://bendrick92.github.io/obdPi) for original documentation: overview, setup, and usage information.
+
+Uses [python-OBD](https://github.com/brendan-w/python-OBD)
 
 ## To-do
 

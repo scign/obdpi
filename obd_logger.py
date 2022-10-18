@@ -8,10 +8,12 @@ import atexit
 import sys
 from time import sleep
 
-import obdpi.shared_settings
+import obdpi.shared_settings as SETTINGS
 from obdpi.log_manager import LogManager
 from obdpi.serial_manager import SerialManager
 from obdpi.obd_manager import ObdManager
+
+import obd
 
 log_man = LogManager()
 ser_man = SerialManager()
@@ -51,16 +53,30 @@ def get_obd_response(obd_command):
         return "[EXCEPTION] " + str(e)
 
 
-def start(obd_command):
-    while True:
-        if init_serial(obdpi.shared_settings.is_testing, obdpi.shared_settings.environment) == "SUCCESS":
+def start():
+    obd_connected = False
+    try_counter = SETTINGS.serial_attempt_count
+    
+    while try_counter:
+        if init_serial(SETTINGS.is_testing, SETTINGS.environment) == "SUCCESS":
             if init_obd(ser_man.connection_id) == "SUCCESS":
+                obd_connected = True
                 break
-        sleep(1.0)
-    while True:
-        obd_response = get_obd_response(obd_command)
-        sleep(0.15)
+        sleep(SETTINGS.serial_repeat_delay)
+        try_counter -= 1
+    
+    if not obd_connected:
+        timeout = SETTINGS.serial_repeat_delay * SETTINGS.serial_attempt_count
+        log_man.add_warning_entry_to_log(f"OBD connection was not detected within {timeout} seconds")
+        end()
 
+    # loop over all commands
+    for mode in obd.commands:
+        if mode:
+            for cmd in mode:
+                if cmd:
+                    get_obd_response(cmd.name)
+    
 
 @log_man.log_event_decorator("Ending Script", "INFO")
 def end():
@@ -68,16 +84,7 @@ def end():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        obd_command = str(sys.argv[1])
-    elif obdpi.shared_settings.obd_command is not None:
-        obd_command = str(obdpi.shared_settings.obd_command)
-    else:
-        obd_command = "RPM"
-
-    obd_command = "ENGINE_LOAD"
-
     atexit.register(end)
     with open('/home/aleem/test_file', 'a') as f:
         f.write(f"Start scanning\n")
-    start(obd_command)
+    start()
