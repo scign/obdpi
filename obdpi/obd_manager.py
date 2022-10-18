@@ -4,7 +4,7 @@ import obd
 class ObdManager:
 
     def __init__(self):
-        self.obd_connection = ""
+        self.obd_connection = None
 
     def init_obd_connection(self, serial_connection_id):
         if obd.scan_serial():
@@ -12,7 +12,7 @@ class ObdManager:
                 self.obd_connection = obd.OBD(serial_connection_id)
 
     def has_obd_connection(self):
-        if self.obd_connection != "":
+        if self.obd_connection:
             if self.obd_connection.is_connected():
                 return True
             else:
@@ -21,23 +21,24 @@ class ObdManager:
             return False
 
     def generate_obd_response(self, command):
-        if self.has_obd_connection():
-            if command == "RPM":
-                obd_command = obd.commands.RPM
-                obd_unit = "rpm"
-            elif command == "BOOST":
-                obd_command = obd.commands.INTAKE_PRESSURE
-                obd_unit = "kPa"
-            else:
-                return "'" + command + "' is unrecognized OBD command"
-
-            obd_response = self.obd_connection.query(obd_command)
-
-            if not obd_response.is_null():
-                # converted_obd_response = round(obd_response.value * self.KPA_TO_PSI_CONVERSION_FACTOR, 3)
-                converted_obd_response = round(obd_response.value, 3)
-                return str(converted_obd_response) + " " + obd_unit
-            else:
-                return "No OBD response"
-        else:
+        if not self.has_obd_connection():
             return "No OBD connection"
+        
+        if command == "RPM":
+            obd_command = obd.commands['RPM']
+            obd_unit = "rpm"
+        elif command == "BOOST":
+            obd_command = obd.commands['INTAKE_PRESSURE']
+            obd_unit = "kPa"
+        else:
+            return "'" + command + "' is unrecognized OBD command"
+
+        obd_response = self.obd_connection.query(obd_command)
+
+        if obd_response.is_null():
+            return "No OBD response"
+        
+        # converted_obd_response = round(obd_response.value * self.KPA_TO_PSI_CONVERSION_FACTOR, 3)
+        converted_obd_response = round(obd_response.value, 3)
+        return str(converted_obd_response) + " " + obd_unit
+            
