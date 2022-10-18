@@ -5,6 +5,7 @@ class ObdManager:
 
     def __init__(self):
         self.obd_connection = None
+        self.cmds = [cmd for mode in obd.commands for cmd in mode if cmd]
 
     def init_obd_connection(self, serial_connection_id):
         if obd.scan_serial():
@@ -24,21 +25,15 @@ class ObdManager:
         if not self.has_obd_connection():
             return "No OBD connection"
         
-        if command == "RPM":
-            obd_command = obd.commands['RPM']
-            obd_unit = "rpm"
-        elif command == "BOOST":
-            obd_command = obd.commands['INTAKE_PRESSURE']
-            obd_unit = "kPa"
-        else:
+        if command not in self.cmds:
             return "'" + command + "' is unrecognized OBD command"
 
-        obd_response = self.obd_connection.query(obd_command)
+        obd_response = self.obd_connection.query(obd.commands[command])
 
         if obd_response.is_null():
             return "No OBD response"
         
         # converted_obd_response = round(obd_response.value * self.KPA_TO_PSI_CONVERSION_FACTOR, 3)
         converted_obd_response = round(obd_response.value, 3)
-        return str(converted_obd_response) + " " + obd_unit
+        return str(converted_obd_response)
             
