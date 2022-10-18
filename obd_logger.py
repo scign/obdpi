@@ -54,11 +54,21 @@ def get_obd_response(obd_command):
 
 
 def start():
-    while True:
+    obd_connected = False
+    try_counter = SETTINGS.serial_attempt_count
+    
+    while try_counter:
         if init_serial(SETTINGS.is_testing, SETTINGS.environment) == "SUCCESS":
             if init_obd(ser_man.connection_id) == "SUCCESS":
+                obd_connected = True
                 break
         sleep(SETTINGS.serial_repeat_delay)
+        try_counter -= 1
+    
+    if not obd_connected:
+        timeout = SETTINGS.serial_repeat_delay * SETTINGS.serial_attempt_count
+        log_man.add_warning_entry_to_log(f"OBD connection was not detected within {timeout} seconds")
+        end()
 
     # loop over all commands
     for mode in obd.commands:
