@@ -13,6 +13,8 @@ from obdpi.log_manager import LogManager
 from obdpi.serial_manager import SerialManager
 from obdpi.obd_manager import ObdManager
 
+import obd
+
 log_man = LogManager()
 ser_man = SerialManager()
 obd_man = ObdManager()
@@ -51,17 +53,20 @@ def get_obd_response(obd_command):
         return "[EXCEPTION] " + str(e)
 
 
-def start(obd_command):
+def start():
     while True:
         if init_serial(SETTINGS.is_testing, SETTINGS.environment) == "SUCCESS":
             if init_obd(ser_man.connection_id) == "SUCCESS":
                 break
         sleep(SETTINGS.serial_repeat_delay)
-    
-    while True:
-        obd_response = get_obd_response(obd_command)
-        sleep(SETTINGS.obd_poll_interval)
 
+    # loop over all commands
+    for mode in obd.commands:
+        if mode:
+            for cmd in mode:
+                if cmd:
+                    get_obd_response(cmd.name)
+    
 
 @log_man.log_event_decorator("Ending Script", "INFO")
 def end():
@@ -69,16 +74,7 @@ def end():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        obd_command = str(sys.argv[1])
-    elif SETTINGS.obd_command is not None:
-        obd_command = str(SETTINGS.obd_command)
-    else:
-        obd_command = "RPM"
-
-    obd_command = "ENGINE_LOAD"
-
     atexit.register(end)
     with open('/home/aleem/test_file', 'a') as f:
         f.write(f"Start scanning\n")
-    start(obd_command)
+    start()
