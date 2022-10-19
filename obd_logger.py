@@ -71,11 +71,8 @@ def start():
         end()
 
     # loop over all commands
-    for mode in obd.commands:
-        if mode:
-            for cmd in mode:
-                if cmd:
-                    get_obd_response(cmd.name)
+    for cmd in obd_man.cmds:
+        get_obd_response(cmd)
     
 
 @log_man.log_event_decorator("Ending Script", "INFO")

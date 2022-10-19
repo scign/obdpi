@@ -5,7 +5,7 @@ class ObdManager:
 
     def __init__(self):
         self.obd_connection = None
-        self.cmds = [cmd for mode in obd.commands for cmd in mode if cmd]
+        self.cmds = [cmd.name for mode in obd.commands for cmd in mode if cmd]
 
     def init_obd_connection(self, serial_connection_id):
         if obd.scan_serial():
