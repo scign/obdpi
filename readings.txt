@@ -5,3 +5,15 @@ VVT Monitor Bank 1
 Purge Flow Monitor
 O2 Sensor Heater Monitor Bank 1 - Sensor 2
 Fuel System Monitor Bank 1
+#Misfire Monitor General Data (Monitor)
+#Misfire Cylinder 1 Data (Monitor)
+#Misfire Cylinder 2 Data (Monitor)
+#Misfire Cylinder 3 Data (Monitor)
+#Misfire Cylinder 4 Data (Monitor)
+#Supported MIDs [01-20] (BitArray)
+#Supported MIDs [21-40] (BitArray)
+#Supported MIDs [41-60] (BitArray)
+#Supported MIDs [61-80] (BitArray)
+#Supported MIDs [81-A0] (BitArray)
+#Supported MIDs [A1-C0] (BitArray)
+#Get DTCs from the current/last driving cycle (list)
