@@ -34,6 +34,6 @@ class ObdManager:
             return "No OBD response"
         
         # converted_obd_response = round(obd_response.value * self.KPA_TO_PSI_CONVERSION_FACTOR, 3)
-        converted_obd_response = round(obd_response.value, 3)
-        return str(converted_obd_response)
+        # converted_obd_response = round(obd_response.value, 3)
+        return str(obd_response) #(converted_obd_response)
             
