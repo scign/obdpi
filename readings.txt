@@ -1,0 +1,26 @@
+FUEL_STATUS
+ENGINE_LOAD
+RPM
+SPEED
+THROTTLE_POS
+RUN_TIME
+MONITOR_O2_B1S1: O2 Sensor Monitor Bank 1 - Sensor 1 (mode 6)
+MONITOR_O2_B1S2: O2 Sensor Monitor Bank 1 - Sensor 2 (mode 6)
+MONITOR_CATALYST_B1: Catalyst Monitor Bank 1 (mode 6)
+MONITOR_VVT_B1: VVT Monitor Bank 1 (mode 6)
+MONITOR_PURGE_FLOW: Purge Flow Monitor (mode 6)
+MONITOR_O2_HEATER_B1S1: O2 Sensor Heater Monitor Bank 1 - Sensor 2 (mode 6)
+MONITOR_FUEL_SYSTEM_B1: Fuel System Monitor Bank 1 (mode 6)
+VIN: Vehicle Identification Number (mode 9)
+#MONITOR_MISFIRE_GENERAL: Misfire Monitor General Data (Monitor) (mode 6)
+#MONITOR_MISFIRE_CYLINDER_1: Misfire Cylinder 1 Data (Monitor) (mode 6)
+#MONITOR_MISFIRE_CYLINDER_2: Misfire Cylinder 2 Data (Monitor) (mode 6)
+#MONITOR_MISFIRE_CYLINDER_3: Misfire Cylinder 3 Data (Monitor) (mode 6)
+#MONITOR_MISFIRE_CYLINDER_4: Misfire Cylinder 4 Data (Monitor) (mode 6)
+#MIDS_A: Supported MIDs [01-20] (BitArray) (mode 6)
+#MIDS_B: Supported MIDs [21-40] (BitArray) (mode 6)
+#MIDS_C: Supported MIDs [41-60] (BitArray) (mode 6)
+#MIDS_D: Supported MIDs [61-80] (BitArray) (mode 6)
+#MIDS_E: Supported MIDs [81-A0] (BitArray) (mode 6)
+#MIDS_F: Supported MIDs [A1-C0] (BitArray) (mode 6)
+#GET_CURRENT_DTC: Get DTCs from the current/last driving cycle (list) (mode 7)
